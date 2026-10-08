@@ -10,7 +10,7 @@ Every piece of code is introduced by what it does, with the technical name after
 
 Type `/tech-walkthrough`, or the agent reaches for it on its own when you ask to understand the technical side, ask whether there is a migration, or ask whether something will get slow.
 
-Use it **after** planning (`/grill-me`, `/grill-with-docs`, a spec, an issue) and **before** implementing. If the business plan is still open, it is too early: go back to grilling. If what you want is the task list rather than the understanding, use [to-tickets](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md).
+Use it **after** planning ([@mattpocock](https://github.com/mattpocock)'s `/grill-me` or `/grill-with-docs`, a spec, an issue) and **before** implementing. If the business plan is still open, it is too early: go back to grilling. If what you want is the task list rather than the understanding, use [to-tickets](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md).
 
 | Situation | What to do |
 |---|---|
@@ -58,4 +58,4 @@ No. It is the last round of the same debate, consolidated: high-severity points 
 
 ## Where it fits
 
-A chain step: `grill-me` or `grill-with-docs` → **tech-walkthrough** → `to-tickets` or `implement`. It comes in when the business side is decided and goes out with the implementation chosen and drawn; the items where the council disagrees with the plan go back into the plan before becoming tickets.
+A chain step in [@mattpocock](https://github.com/mattpocock)'s flow: his `grill-me` or `grill-with-docs` → **tech-walkthrough** → his `to-tickets` or `implement`. It comes in when the business side is decided and goes out with the implementation chosen and drawn; the items where the council disagrees with the plan go back into the plan before becoming tickets.

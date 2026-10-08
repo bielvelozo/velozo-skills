@@ -2,7 +2,7 @@
 
 Skills I use every day with coding agents (Claude Code, Codex and friends), straight from my skills directory.
 
-They are small, easy to adapt, and composable with [Matt Pocock's skills](https://github.com/mattpocock/skills): I plan with `/grill-me` or `/grill-with-docs`, and once the business decisions are settled I use the skills here to see the technical side before implementing. Hack around with them. Make them your own.
+They are small, easy to adapt, and composable with [@mattpocock](https://github.com/mattpocock)'s [skills](https://github.com/mattpocock/skills): I plan with his `/grill-me` or `/grill-with-docs`, and once the business decisions are settled I use the skills here to see the technical side before implementing. Hack around with them. Make them your own.
 
 ## Installation
 
@@ -73,7 +73,7 @@ Symlinks every skill into `~/.claude/skills` and `~/.agents/skills`; a `git pull
 
 ### The plan is clear, the implementation is not
 
-**The problem.** A `/grill-me` session leaves the business decisions well defined. But the technical side (which route is born, which queue is reused, whether there is a migration and why, what runs in the background) ends up scattered across paragraphs, and I don't hold the whole codebase in my head to follow along.
+**The problem.** A `/grill-me` session ([@mattpocock](https://github.com/mattpocock)'s skill) leaves the business decisions well defined. But the technical side (which route is born, which queue is reused, whether there is a migration and why, what runs in the background) ends up scattered across paragraphs, and I don't hold the whole codebase in my head to follow along.
 
 **The fix.** One Excalidraw board, one infinite canvas, with the before and after of each flow, the map of the systems that talk to each other, the backstage (queues, workers, retries), the migration with its why, the performance verdict, and the risks that remain. Every piece of code is introduced by what it does, with the technical name after it. The implementation it explains comes out of a debate between three agents (minimal, robust, performance), not the first idea that works.
 
