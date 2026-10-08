@@ -1,1 +1,1 @@
-Leia [CLAUDE.md](./CLAUDE.md): as convenções deste repositório estão lá.
+Read [CLAUDE.md](./CLAUDE.md): this repo's conventions live there.

@@ -1,15 +1,15 @@
 # Engineering
 
-Skills para o trabalho com código.
+Skills for code work.
 
 ## User-invoked
 
-Só rodam quando você digita o nome (Claude Code: `disable-model-invocation: true`; Codex: `policy.allow_implicit_invocation: false` em `agents/openai.yaml`).
+Reachable only when you type them (Claude Code: `disable-model-invocation: true`; Codex: `policy.allow_implicit_invocation: false` in `agents/openai.yaml`).
 
-Nenhuma ainda.
+None yet.
 
 ## Model-invoked
 
-Você digita ou o agente aciona sozinho quando a tarefa encaixa (descrição com gatilhos ricos).
+Model- or user-reachable (rich trigger phrasing so the model can reach for them).
 
-- **[tech-walkthrough](./tech-walkthrough/SKILL.md)**: Explica a parte técnica de um plano já decidido num quadro Excalidraw: antes e depois, mapa da arquitetura, bastidores, migrations, performance e riscos. Três agentes debatem a melhor implementação antes de desenhar. `fast` pula o debate.
+- **[tech-walkthrough](./tech-walkthrough/SKILL.md)**: Explains the technical side of an already-decided plan on an Excalidraw board: before and after, architecture map, backstage, migrations, performance and risks. Three agents debate the best implementation before anything is drawn. `fast` skips the debate.

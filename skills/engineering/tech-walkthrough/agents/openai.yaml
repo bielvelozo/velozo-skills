@@ -1,5 +1,5 @@
 interface:
   display_name: "Tech Walkthrough"
-  short_description: "Desenha a parte técnica de um plano num quadro Excalidraw"
+  short_description: "Draw the technical side of a plan on an Excalidraw board"
 policy:
   allow_implicit_invocation: true

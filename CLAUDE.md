@@ -1,20 +1,20 @@
-As skills ficam em pastas de bucket dentro de `skills/`:
+Skills are organized into bucket folders under `skills/`:
 
-- `engineering/`: trabalho com código, uso diário
-- `productivity/`: fluxo de trabalho sem código, uso diário
-- `in-progress/`: beta, pública de propósito, não entra no plugin
-- `deprecated/`: não usa mais
+- `engineering/`: daily code work
+- `productivity/`: daily non-code workflow tools
+- `in-progress/`: beta, public on purpose, not shipped in the plugin
+- `deprecated/`: no longer used
 
-Toda skill em `engineering/` ou `productivity/` (os buckets **promovidos**) precisa de uma entrada no `README.md` da raiz e de uma entrada no array `skills` de `.claude-plugin/plugin.json` (o plugin do Claude Code entrega exatamente o conjunto promovido). Skills em `in-progress/` e `deprecated/` não aparecem em nenhum dos dois.
+Every skill in `engineering/` or `productivity/` (the **promoted** buckets) must have an entry in the top-level `README.md` and an entry in the `skills` array of `.claude-plugin/plugin.json` (the Claude Code plugin ships exactly the promoted set). Skills in `in-progress/` and `deprecated/` appear in neither.
 
-Cada pasta de bucket tem um `README.md` que lista toda skill do bucket com uma descrição de uma linha, o nome ligado ao `SKILL.md`. Os buckets promovidos e o `README.md` da raiz agrupam em **User-invoked** e **Model-invoked**; os outros usam lista simples.
+Each bucket folder has a `README.md` that lists every skill in the bucket with a one-line description, the skill name linked to its `SKILL.md`. The promoted buckets' `README.md`s and the top-level `README.md` group entries into **User-invoked** and **Model-invoked**; the other buckets use a flat list.
 
-Cada skill promovida tem também uma página de docs em `docs/<bucket>/<skill>.md`, com as seções **O que faz**, **Quando usar**, **Perguntas comuns** e **Está funcionando se**. Quando uma skill promovida é criada, renomeada ou muda de comportamento, crie ou ressincronize a página.
+Each promoted skill also has a human-facing docs page at `docs/<bucket>/<skill>.md`, with the sections **What it does**, **When to reach for it**, **Common questions** and **It's working if**. When a promoted skill is added, renamed, or changes behaviour, create or re-sync its page.
 
-Cada `SKILL.md` é user-invoked (`disable-model-invocation: true` no frontmatter e `policy.allow_implicit_invocation: false` em `agents/openai.yaml`) ou model-invoked (descrição com gatilhos ricos e `allow_implicit_invocation: true`).
+Every `SKILL.md` is either user-invoked (`disable-model-invocation: true` in the frontmatter and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`) or model-invoked (rich trigger phrasing in the description and `allow_implicit_invocation: true`).
 
-`.claude-plugin/marketplace.json` é o marketplace do próprio repositório. Depois de mexer em qualquer manifesto, rode `claude plugin validate . --strict`.
+`.claude-plugin/marketplace.json` is the repo's own marketplace. After touching either manifest, run `claude plugin validate . --strict`.
 
-Para (re)ligar toda skill fora de `deprecated/` nos diretórios locais de skills (`~/.claude/skills`, `~/.agents/skills`), rode `scripts/link-skills.sh`. Cada entrada é um link simbólico para este repositório; rode de novo depois de criar, remover ou renomear uma skill.
+To (re)link every skill outside `deprecated/` into the local skill directories (`~/.claude/skills`, `~/.agents/skills`), run `scripts/link-skills.sh`. Each entry is a symlink into this repo; re-run the script after adding, removing, or renaming a skill.
 
-Argumentos de skill (`fast`, por exemplo) e nomes de arquivo são em inglês. O texto das skills e dos docs é em português.
+Repo prose (README, docs, CLAUDE.md, CHANGELOG), skill arguments (`fast`, for example) and file names are in English. The text inside the skills themselves (`SKILL.md`, references, prompts) is in Portuguese.

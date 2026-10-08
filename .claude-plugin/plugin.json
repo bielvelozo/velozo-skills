@@ -1,7 +1,7 @@
 {
   "name": "velozo-skills",
   "version": "0.1.0",
-  "description": "Skills do Gabriel Velozo para engenharia com agentes: tech walkthrough visual (Excalidraw) da parte técnica de um plano, com debate entre agentes e análise de riscos.",
+  "description": "Gabriel Velozo's agent skills for engineering: a visual tech walkthrough (Excalidraw) of a plan's technical side, with an agent debate and risk analysis.",
   "author": {
     "name": "Gabriel Velozo",
     "url": "https://github.com/bielvelozo"
