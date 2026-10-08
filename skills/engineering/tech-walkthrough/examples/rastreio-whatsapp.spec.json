@@ -1,0 +1,556 @@
+{
+  "title": "Tech walkthrough — rastreio por WhatsApp",
+  "artifact": "",
+  "sections": [
+    {
+      "id": "antes",
+      "title": "Antes",
+      "row": 1,
+      "note": "Hoje o único aviso de rastreio é o e-mail da Shopify. Quem não vê pergunta no WhatsApp, e a atendente busca o código na mão.",
+      "flow": [
+        {
+          "title": "Bling · pedido despachado",
+          "subtitle": "nota emitida, código de rastreio gerado",
+          "style": "gray"
+        },
+        {
+          "title": "Shopify · e-mail de rastreio",
+          "subtitle": "único aviso que existe hoje",
+          "style": "gray"
+        },
+        {
+          "title": "Cliente não vê o e-mail",
+          "subtitle": "pergunta no WhatsApp: cadê meu pedido?",
+          "style": "red"
+        },
+        {
+          "title": "Atendente busca o rastreio na mão",
+          "subtitle": "abre o Bling e copia o código",
+          "style": "red"
+        }
+      ]
+    },
+    {
+      "id": "depois",
+      "title": "Depois",
+      "row": 1,
+      "note": "O despacho no Bling vira um aviso que o OMS recebe, enfileira e manda por WhatsApp pelo Chatwoot. O e-mail da Shopify continua igual.",
+      "flow": [
+        {
+          "title": "Bling · pedido despachado",
+          "subtitle": "nota emitida, código de rastreio gerado",
+          "style": "gray"
+        },
+        {
+          "title": "OMS · rota POST /webhooks/bling/shipment",
+          "subtitle": "recebe o aviso e enfileira",
+          "style": "green"
+        },
+        {
+          "title": "OMS · fila tracking-notifications",
+          "subtitle": "confere se já avisou, tenta até 3 vezes",
+          "style": "green"
+        },
+        {
+          "title": "Chatwoot · mensagem de WhatsApp",
+          "subtitle": "template aprovado com link de rastreio",
+          "style": "green"
+        },
+        {
+          "title": "Shopify · e-mail de rastreio",
+          "subtitle": "continua igual, sem mudança",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "id": "bast",
+      "title": "Bastidores",
+      "row": 1,
+      "w": 896,
+      "note": "A caixa \"fila\" do Depois, por dentro. A rota responde na hora; tudo abaixo dela roda em segundo plano, sem ninguém esperando.",
+      "legend": {
+        "red": "caso de falha"
+      },
+      "boxes": [
+        {
+          "id": "b1",
+          "x": 160,
+          "y": 152,
+          "w": 400,
+          "h": 88,
+          "title": "Rota POST /webhooks/bling/shipment",
+          "subtitle": "confere a assinatura, publica 1 mensagem",
+          "style": "green"
+        },
+        {
+          "id": "b2",
+          "x": 160,
+          "y": 296,
+          "w": 400,
+          "h": 88,
+          "title": "SQS tracking-notifications",
+          "subtitle": "uma por pedido, até 3 tentativas",
+          "style": "green"
+        },
+        {
+          "id": "b3",
+          "x": 160,
+          "y": 440,
+          "w": 400,
+          "h": 88,
+          "title": "Worker tracking-notifier (ECS)",
+          "subtitle": "lê o pedido, chama o Chatwoot",
+          "style": "green"
+        },
+        {
+          "id": "b4",
+          "x": 160,
+          "y": 584,
+          "w": 400,
+          "h": 88,
+          "title": "Tabela tracking_notifications",
+          "subtitle": "enviado ou falhou, com o motivo",
+          "style": "green"
+        },
+        {
+          "id": "b5",
+          "x": 616,
+          "y": 440,
+          "w": 216,
+          "h": 88,
+          "title": "Esgotou as 3 tentativas",
+          "subtitle": "fica \"falhou\"; botão de reenviar",
+          "style": "red"
+        }
+      ],
+      "arrows": [
+        {
+          "from": "b1",
+          "to": "b2"
+        },
+        {
+          "from": "b2",
+          "to": "b3"
+        },
+        {
+          "from": "b3",
+          "to": "b4"
+        },
+        {
+          "from": "b3",
+          "to": "b5",
+          "label": "falhou"
+        },
+        {
+          "from": "b5",
+          "to": "b4",
+          "via": [
+            [
+              724,
+              628
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mapa",
+      "title": "Mapa da arquitetura",
+      "row": 2,
+      "w": 896,
+      "note": "Só o que participa da mudança. O Bling passa a falar com o OMS; o OMS passa a escrever no Chatwoot.",
+      "boxes": [
+        {
+          "id": "m0",
+          "x": 288,
+          "y": 136,
+          "w": 320,
+          "h": 432,
+          "style": "dashed"
+        },
+        {
+          "id": "m1",
+          "x": 64,
+          "y": 176,
+          "w": 160,
+          "h": 80,
+          "title": "Bling",
+          "subtitle": "despacha o pedido",
+          "style": "gray"
+        },
+        {
+          "id": "m2",
+          "x": 328,
+          "y": 176,
+          "w": 240,
+          "h": 80,
+          "title": "Rota de avisos do Bling",
+          "subtitle": "recebe e enfileira",
+          "style": "green"
+        },
+        {
+          "id": "m3",
+          "x": 328,
+          "y": 312,
+          "w": 240,
+          "h": 80,
+          "title": "Fila + worker de envio",
+          "subtitle": "roda em segundo plano",
+          "style": "green"
+        },
+        {
+          "id": "m4",
+          "x": 328,
+          "y": 448,
+          "w": 240,
+          "h": 80,
+          "title": "Tabela de avisos",
+          "subtitle": "nova, no banco do OMS",
+          "style": "green"
+        },
+        {
+          "id": "m5",
+          "x": 672,
+          "y": 312,
+          "w": 160,
+          "h": 80,
+          "title": "Chatwoot",
+          "subtitle": "envia a mensagem",
+          "style": "gray"
+        },
+        {
+          "id": "m6",
+          "x": 672,
+          "y": 448,
+          "w": 160,
+          "h": 80,
+          "title": "WhatsApp",
+          "subtitle": "do cliente",
+          "style": "gray"
+        }
+      ],
+      "arrows": [
+        {
+          "from": "m1",
+          "to": "m2"
+        },
+        {
+          "from": "m2",
+          "to": "m3"
+        },
+        {
+          "from": "m3",
+          "to": "m4"
+        },
+        {
+          "from": "m3",
+          "to": "m5"
+        },
+        {
+          "from": "m5",
+          "to": "m6"
+        }
+      ],
+      "labels": [
+        {
+          "x": 304,
+          "y": 144,
+          "text": "OMS"
+        }
+      ]
+    },
+    {
+      "id": "pecas",
+      "title": "Peças tocadas",
+      "row": 2,
+      "w": 1120,
+      "note": "Só backend e infraestrutura. Nenhum package novo é instalado; o cadastro do webhook no painel do Bling é seu.",
+      "stack": [
+        {
+          "table": {
+            "widths": [
+              120,
+              300,
+              260,
+              312
+            ],
+            "header": [
+              "Tipo",
+              "Peça",
+              "O que ela faz hoje",
+              "O que muda"
+            ],
+            "rows": [
+              [
+                "package",
+                "Parte do OMS que fala com o Bling (integrations/bling)",
+                "Só consulta pedidos e notas quando alguém pede",
+                "Passa a receber avisos do Bling pela rota nova"
+              ],
+              [
+                "package",
+                "Parte do OMS que fala com o Chatwoot (integrations/chatwoot)",
+                "Cria e atualiza contatos",
+                "Ganha o envio de mensagem de template no WhatsApp"
+              ],
+              [
+                {
+                  "text": "rota · NOVO",
+                  "style": "green"
+                },
+                "POST /webhooks/bling/shipment",
+                "não existia",
+                "O Bling chama ao despachar; só confere a assinatura e enfileira"
+              ],
+              [
+                {
+                  "text": "fila · NOVO",
+                  "style": "green"
+                },
+                "SQS tracking-notifications",
+                "não existia",
+                "Guarda os avisos pendentes; tenta até 3 vezes"
+              ],
+              [
+                {
+                  "text": "worker · NOVO",
+                  "style": "green"
+                },
+                "tracking-notifier (ECS)",
+                "não existia",
+                "Decide se avisa, monta a mensagem e registra o envio"
+              ],
+              [
+                {
+                  "text": "config · NOVO",
+                  "style": "green"
+                },
+                "BLING_WEBHOOK_SECRET",
+                "não existia",
+                "Segredo para conferir que o aviso veio mesmo do Bling"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "banco",
+      "title": "Banco de dados — tem migration",
+      "row": 3,
+      "w": 720,
+      "note": "Uma migration só, de adição.",
+      "stack": [
+        {
+          "card": {
+            "style": "green",
+            "heading": "O que muda",
+            "text": "Nasce a tabela que guarda um registro por aviso enviado: pedido, telefone, situação e horário (tracking_notifications)."
+          }
+        },
+        {
+          "card": {
+            "heading": "Por quê",
+            "text": "O Bling pode mandar o mesmo aviso duas vezes. Sem esse registro, o cliente receberia o WhatsApp em dobro. Exemplo: o pedido 1042 chega de novo; o OMS vê a linha \"enviado\" e ignora."
+          }
+        },
+        {
+          "card": {
+            "heading": "Dados que já existem",
+            "text": "Nada acontece com eles. Pedidos despachados antes do deploy não recebem aviso."
+          }
+        },
+        {
+          "card": {
+            "style": "gray",
+            "heading": "Risco: baixo",
+            "text": "Só adiciona uma tabela: não trava nada e dá para desfazer."
+          }
+        }
+      ]
+    },
+    {
+      "id": "perf",
+      "title": "Performance",
+      "row": 3,
+      "w": 960,
+      "note": "Estimativa pela leitura do código, sem medição.",
+      "stack": [
+        {
+          "table": {
+            "widths": [
+              260,
+              140,
+              432
+            ],
+            "header": [
+              "Fluxo",
+              "Veredito",
+              "Por quê"
+            ],
+            "rows": [
+              [
+                "Aviso de despacho (Bling → WhatsApp)",
+                {
+                  "text": "novo, leve",
+                  "style": "green"
+                },
+                "A rota só confere o aviso e enfileira, responde na hora. A parte lenta (Chatwoot) roda em segundo plano: ver Bastidores."
+              ],
+              [
+                "Tela do pedido no OMS",
+                {
+                  "text": "igual",
+                  "style": "gray"
+                },
+                "Uma consulta a mais por pedido, em tabela pequena com índice. Não dá para perceber."
+              ],
+              [
+                "Resto do OMS",
+                {
+                  "text": "igual",
+                  "style": "gray"
+                },
+                "Nada do que já existe passa pelo código novo."
+              ]
+            ]
+          }
+        },
+        {
+          "columns": [
+            {
+              "style": "yellow",
+              "heading": "O que faria ficar lento",
+              "text": "Pico de despachos (Black Friday): a fila cresce e os avisos atrasam alguns minutos. Nada trava nem se perde; só chega mais tarde."
+            },
+            {
+              "heading": "Custo novo",
+              "text": "Uma fila SQS a mais e uma chamada ao Chatwoot por pedido despachado. Volume igual ao de pedidos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decisoes",
+      "title": "Como chegou nessa implementação",
+      "row": 4,
+      "w": 960,
+      "note": "Onde o conselho (mínimo, robusto, performance) pesou alternativas.",
+      "stack": [
+        {
+          "table": {
+            "widths": [
+              200,
+              160,
+              200,
+              272
+            ],
+            "header": [
+              "Decisão",
+              "Escolha",
+              "Descartada",
+              "Por quê"
+            ],
+            "rows": [
+              [
+                "Como saber do despacho",
+                "Webhook do Bling",
+                "Cron consultando o Bling a cada 5 min",
+                "Aviso na hora e sem gastar a cota de chamadas do Bling (performance)"
+              ],
+              [
+                "Onde guardar o \"já avisei\"",
+                "Tabela nova",
+                "Campo livre do pedido",
+                "Dois avisos ao mesmo tempo poderiam se sobrescrever no campo livre (robusto)"
+              ],
+              [
+                "Como enviar",
+                "Fila + worker",
+                "Chamar o Chatwoot na própria rota",
+                "Se o Chatwoot cair, o Bling receberia erro e pararia de avisar (robusto)"
+              ]
+            ]
+          }
+        },
+        {
+          "card": {
+            "style": "gray",
+            "text": "O mínimo queria reaproveitar a fila orders-default; perdeu porque ela não garante ordem por pedido, e o aviso poderia sair antes do pedido existir no OMS."
+          }
+        }
+      ]
+    },
+    {
+      "id": "riscos",
+      "title": "Riscos",
+      "row": 4,
+      "w": 960,
+      "note": "Rodada de riscos do conselho, conferida no código. O ponto alto foi checado antes de entrar aqui.",
+      "stack": [
+        {
+          "card": {
+            "style": "green",
+            "heading": "Veredito",
+            "text": "A arquitetura está certa. O pior problema é mensagem duplicada ao cliente; não perde dinheiro nem dado."
+          }
+        },
+        {
+          "card": {
+            "style": "yellow",
+            "heading": "1. O conselho discorda do plano",
+            "text": "O worker grava \"enviado\" depois de chamar o Chatwoot. Se o OMS reiniciar entre as duas coisas, a mensagem sai de novo na próxima tentativa. Correção: gravar \"enviando\" antes da chamada e só então \"enviado\"."
+          }
+        },
+        {
+          "table": {
+            "widths": [
+              300,
+              220,
+              312
+            ],
+            "header": [
+              "Ponto",
+              "Gravidade",
+              "Situação"
+            ],
+            "rows": [
+              [
+                "Reinício entre envio e registro",
+                {
+                  "text": "Média · mensagem em dobro",
+                  "style": "yellow"
+                },
+                "corrigível, entra no plano"
+              ],
+              [
+                "Pedido sem telefone",
+                {
+                  "text": "Baixa · fica sem aviso",
+                  "style": "gray"
+                },
+                "pendência: decidir se registra \"não enviado\""
+              ],
+              [
+                "Template não aprovado pela Meta",
+                {
+                  "text": "Alta · nenhum envio sai",
+                  "style": "red"
+                },
+                "pendência: aprovar antes do deploy (você)"
+              ]
+            ]
+          }
+        },
+        {
+          "card": {
+            "heading": "O que resistiu",
+            "text": "Fila com 3 tentativas: o Bling nunca vê erro do Chatwoot. Tabela própria: o \"já avisei\" não disputa com outras escritas no pedido."
+          }
+        }
+      ]
+    }
+  ]
+}

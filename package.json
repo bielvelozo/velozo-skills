@@ -1,0 +1,16 @@
+{
+  "name": "velozo-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skills do Gabriel Velozo para engenharia com agentes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bielvelozo/velozo-skills"
+  },
+  "license": "MIT",
+  "scripts": {
+    "list-skills": "bash scripts/list-skills.sh",
+    "link-skills": "bash scripts/link-skills.sh",
+    "validate": "claude plugin validate . --strict"
+  }
+}

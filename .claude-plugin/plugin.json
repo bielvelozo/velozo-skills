@@ -1,0 +1,23 @@
+{
+  "name": "velozo-skills",
+  "version": "0.1.0",
+  "description": "Skills do Gabriel Velozo para engenharia com agentes: tech walkthrough visual (Excalidraw) da parte técnica de um plano, com debate entre agentes e análise de riscos.",
+  "author": {
+    "name": "Gabriel Velozo",
+    "url": "https://github.com/bielvelozo"
+  },
+  "homepage": "https://github.com/bielvelozo/velozo-skills",
+  "repository": "https://github.com/bielvelozo/velozo-skills",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "excalidraw",
+    "system-design",
+    "walkthrough",
+    "planning"
+  ],
+  "skills": [
+    "./skills/engineering/tech-walkthrough"
+  ]
+}

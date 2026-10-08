@@ -1,0 +1,22 @@
+{
+  "name": "velozo",
+  "owner": {
+    "name": "Gabriel Velozo",
+    "url": "https://github.com/bielvelozo"
+  },
+  "description": "Skills do Gabriel Velozo para engenharia com agentes, como plugin instalável do Claude Code.",
+  "plugins": [
+    {
+      "name": "velozo-skills",
+      "source": "./",
+      "description": "Tech walkthrough visual (Excalidraw) da parte técnica de um plano, com debate entre agentes e análise de riscos.",
+      "category": "engineering",
+      "keywords": [
+        "engineering",
+        "skills",
+        "excalidraw",
+        "walkthrough"
+      ]
+    }
+  ]
+}
