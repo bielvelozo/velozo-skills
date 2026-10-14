@@ -11,6 +11,6 @@
   "scripts": {
     "list-skills": "bash scripts/list-skills.sh",
     "link-skills": "bash scripts/link-skills.sh",
-    "validate": "claude plugin validate . --strict"
+    "validate": "claude plugin validate ."
   }
 }

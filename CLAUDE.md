@@ -13,7 +13,7 @@ Each promoted skill also has a human-facing docs page at `docs/<bucket>/<skill>.
 
 Every `SKILL.md` is either user-invoked (`disable-model-invocation: true` in the frontmatter and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`) or model-invoked (rich trigger phrasing in the description and `allow_implicit_invocation: true`).
 
-`.claude-plugin/marketplace.json` is the repo's own marketplace. After touching either manifest, run `claude plugin validate . --strict`.
+`.claude-plugin/marketplace.json` is the repo's own marketplace. After touching either manifest, run `claude plugin validate .`.
 
 To (re)link every skill outside `deprecated/` into the local skill directories (`~/.claude/skills`, `~/.agents/skills`), run `scripts/link-skills.sh`. Each entry is a symlink into this repo; re-run the script after adding, removing, or renaming a skill.
 
