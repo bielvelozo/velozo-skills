@@ -1,6 +1,6 @@
 ## What it does
 
-`tech-walkthrough` takes a plan whose business decisions are already made and shows **what is going to happen in the code**, on a single Excalidraw board: the before and after of each flow, the map of the systems that talk to each other, the backstage (queue, worker, retries, where the result lands), the migration with its why, the performance verdict, and the risks that remain. The chat gets the link and three lines; everything else is drawn.
+`tech-walkthrough` takes a plan whose business decisions are already made and shows **what is going to happen in the code**, on a single Excalidraw board: the before and after of each flow, the project's glossary terms it uses, the map of the systems that talk to each other, the backstage (queue, worker, retries, where the result lands), the database diagram with the migration and its why, the performance verdict, and the risks that remain. The chat gets the link and three lines; everything else is drawn.
 
 It does not explain the implementation you would have written first. Before anything is drawn, three agents with different biases (minimal, robust, performance) propose, critique and converge on the implementation, and the board explains the one that came out of the debate, with the alternatives it discarded and the failure points each agent found.
 
@@ -30,6 +30,10 @@ The implementation is chosen through a debate in rounds: each agent proposes fro
 
 The debate is not on the board. What is on the board is its result: the **How we got to this implementation** section (decision, choice, discarded, why) and the **Risks** section (verdict, where the council disagrees with the plan, failure points by severity, what held up).
 
+## The glossary and the database diagram
+
+The board speaks the project's vocabulary: a glossary section lists the terms it uses as `GLOSSARY.md` defines them (the file that [@mattpocock](https://github.com/mattpocock)'s `grill-with-docs` maintains), and a term the plan uses that the glossary lacks is flagged as new, so the glossary gets updated. The database section opens with an entity diagram built from the schema's source of truth (Prisma schema, migrations, ORM models): the touched tables and their direct neighbours, with real table and column names, keys, and every added or changed column marked, followed by the schema change table and the migration notes.
+
 ## The backstage
 
 The "queue" box in a flow hides exactly the part you cannot picture on your own: who publishes and how many messages, through which queue and with what guarantee (ordering, retries), who consumes, where the result lands, what happens when the retries run out. The skill opens that box in its own section whenever an earlier diagram mentions a queue, worker, job, webhook or retry, without waiting for you to ask.
@@ -53,7 +57,7 @@ No. It is the last round of the same debate, consolidated: high-severity points 
 - You understand what changes by looking at the before and after, without reading the table.
 - Every box carries the real name you will find in the code or the console (queue, worker, route), not an invented one.
 - The backstage section showed up without you asking, whenever a queue or job was on the path.
-- The migration has a why you could repeat to someone else.
+- The migration has a why you could repeat to someone else, and the database diagram uses the same table names you see in the schema.
 - The chat is four lines long, and the rest is on the board.
 
 ## Where it fits

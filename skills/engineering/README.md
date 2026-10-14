@@ -12,4 +12,4 @@ None yet.
 
 Model- or user-reachable (rich trigger phrasing so the model can reach for them).
 
-- **[tech-walkthrough](./tech-walkthrough/SKILL.md)**: Explains the technical side of an already-decided plan on an Excalidraw board: before and after, architecture map, backstage, migrations, performance and risks. Three agents debate the best implementation before anything is drawn. `fast` skips the debate.
+- **[tech-walkthrough](./tech-walkthrough/SKILL.md)**: Explains the technical side of an already-decided plan on an Excalidraw board: before and after, glossary, architecture map, backstage, database diagram and migrations, performance and risks. Three agents debate the best implementation before anything is drawn. `fast` skips the debate.

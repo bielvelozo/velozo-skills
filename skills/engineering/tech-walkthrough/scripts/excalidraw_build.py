@@ -58,6 +58,13 @@ BOX_W = 440
 BOX_H = 88
 BOX_GAP = 56
 STACK_GAP = 20
+ENTITY_W = 260
+ENTITY_HEADER_H = 40
+ENTITY_ROW_H = 30
+ENTITY_GAP_X = 72
+ENTITY_GAP_Y = 96
+CHANGE_FILL = {"added": "green", "changed": "yellow", "removed": "red"}
+CHANGE_MARK = {"added": "+ ", "changed": "~ ", "removed": "- "}
 
 _counter = [0]
 
@@ -233,7 +240,58 @@ class Builder:
             cols = item["columns"]
             w = (s.w - 2 * MARGIN - STACK_GAP * (len(cols) - 1)) / len(cols)
             return max(c.get("h") or text_height(self.card_text(c), w, 16) for c in cols)
+        if "erd" in item:
+            return self.erd_layout(s, item["erd"])[1]
         return 0
+
+    def erd_layout(self, s, e):
+        avail = s.w - 2 * MARGIN
+        w = e.get("entityWidth", ENTITY_W)
+        per_row = max(1, int((avail + ENTITY_GAP_X) // (w + ENTITY_GAP_X)))
+        placed = []
+        x = y = row_h = col = 0
+        for ent in e["entities"]:
+            h = ENTITY_HEADER_H + len(ent["columns"]) * ENTITY_ROW_H
+            if "x" in ent and "y" in ent:
+                placed.append((ent, ent["x"], ent["y"], w, h))
+                continue
+            if col == per_row:
+                col, x = 0, 0
+                y += row_h + ENTITY_GAP_Y
+                row_h = 0
+            placed.append((ent, x, y, w, h))
+            x += w + ENTITY_GAP_X
+            row_h = max(row_h, h)
+            col += 1
+        total = max(py + ph for _, _, py, _, ph in placed) if placed else 0
+        return placed, total
+
+    def erd(self, s, x0, y0, e):
+        placed, _ = self.erd_layout(s, e)
+        for ent, ex, ey, w, h in placed:
+            x, y = s.x + x0 + ex, s.y + y0 + ey
+            group = _id("g")
+            outer = rect_el(x, y, w, h, "white", frame=s.frame, group=group)
+            outer["id"] = ent["name"]
+            self.elements.append(outer)
+            s.boxes[ent["name"]] = outer
+            header = rect_el(x, y, w, ENTITY_HEADER_H, CHANGE_FILL.get(ent.get("change"), "gray"), frame=s.frame, group=group, stroke_width=1, radius=False)
+            self.elements.append(header)
+            self.elements.append(text_el(x + PAD, y + (ENTITY_HEADER_H - 18 * LINE_HEIGHT) / 2, ent["name"], 18, align="center", width=w - 2 * PAD, frame=s.frame, group=group))
+            ry = y + ENTITY_HEADER_H
+            for c in ent["columns"]:
+                change = c.get("change") or ("added" if ent.get("change") == "added" else None)
+                row = rect_el(x, ry, w, ENTITY_ROW_H, CHANGE_FILL.get(change, "none"), frame=s.frame, group=group, stroke_width=1, radius=False)
+                self.elements.append(row)
+                key = "PK " if c.get("pk") else ("FK " if c.get("fk") else "")
+                label = f"{CHANGE_MARK.get(change, '')}{key}{c['name']}"
+                self.elements.append(text_el(x + PAD, ry + (ENTITY_ROW_H - 14 * LINE_HEIGHT) / 2, label, 14, frame=s.frame, group=group))
+                if c.get("type"):
+                    self.elements.append(text_el(x + w / 2, ry + (ENTITY_ROW_H - 13 * LINE_HEIGHT) / 2, c["type"], 13, color=MUTED, align="right", width=w / 2 - PAD, frame=s.frame, group=group))
+                ry += ENTITY_ROW_H
+            s.max_bottom = max(s.max_bottom, y0 + ey + h)
+        for r in e.get("relations", []):
+            self.arrow({"from": r["from"], "to": r["to"], "label": r.get("label"), "style": r.get("style", "solid")}, s)
 
     def card_text(self, c):
         heading = c.get("heading")
@@ -270,6 +328,11 @@ class Builder:
         styles = []
         if "flow" in sp:
             styles = [b.get("style", "gray") for b in sp["flow"]]
+        elif "stack" in sp:
+            for item in sp["stack"]:
+                for ent in item.get("erd", {}).get("entities", []):
+                    styles.append(CHANGE_FILL.get(ent.get("change"), "gray"))
+                    styles.extend(CHANGE_FILL[c["change"]] for c in ent["columns"] if c.get("change") in CHANGE_FILL)
         else:
             styles = [b.get("style", "gray") for b in sp.get("boxes", []) if b.get("title")]
         used = [st for st in LEGEND_ORDER if st in styles]
@@ -342,6 +405,8 @@ class Builder:
                 h = self.item_height(s, item)
                 for j, c in enumerate(cols):
                     self.card(s, MARGIN + j * (w + STACK_GAP), y, w, c, h)
+            elif "erd" in item:
+                self.erd(s, MARGIN, y, item["erd"])
             y += self.item_height(s, item) + STACK_GAP
 
     def box(self, s, b):

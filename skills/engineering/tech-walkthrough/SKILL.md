@@ -1,6 +1,6 @@
 ---
 name: tech-walkthrough
-description: Explica visualmente a parte técnica de um plano já decidido, num quadro Excalidraw único no estilo de desenho de system design (publicado como artifact e salvo como arquivo .excalidraw no repositório) — mapa da arquitetura, diagramas de antes e depois, o fluxo de bastidores (filas, workers, jobs, webhooks), rotas e serviços novos, packages instalados, migrations e o porquê de cada uma, o impacto em performance e os riscos que sobram (pontos de falha por gravidade, onde o conselho discorda do plano, o que resistiu) — quase sem texto no chat e sem assumir que o usuário lembra do código. A implementação explicada sai de um debate entre três sub-agentes (mínimo, robusto, performance) que convergem para a melhor opção. Use sempre que o usuário terminar um planejamento (grilling, /grill-me, /grill-with-docs, brainstorming, writing-plans, spec, issue) e quiser entender o que vai ser feito tecnicamente, ou disser coisas como "me explica a parte técnica", "o que vai mudar no código", "quero entender a implementação", "tem migration?", "isso vai ficar lento?", "raio-x técnico", "tech walkthrough", "desenha a implementação", "essa é a melhor implementação?", "o que pode dar errado?", "revisa o plano técnico", mesmo que não peça diagrama. Aceita o argumento `fast` para pular o debate em entregas pequenas.
+description: Explica visualmente a parte técnica de um plano já decidido, num quadro Excalidraw único no estilo de desenho de system design (publicado como artifact e salvo como arquivo .excalidraw no repositório) — glossário do projeto, mapa da arquitetura, diagramas de antes e depois, o fluxo de bastidores (filas, workers, jobs, webhooks), rotas e serviços novos, packages instalados, diagrama do banco (ERD) e migrations com o porquê de cada uma, o impacto em performance e os riscos que sobram (pontos de falha por gravidade, onde o conselho discorda do plano, o que resistiu) — quase sem texto no chat e sem assumir que o usuário lembra do código. A implementação explicada sai de um debate entre três sub-agentes (mínimo, robusto, performance) que convergem para a melhor opção. Use sempre que o usuário terminar um planejamento (grilling, /grill-me, /grill-with-docs, brainstorming, writing-plans, spec, issue) e quiser entender o que vai ser feito tecnicamente, ou disser coisas como "me explica a parte técnica", "o que vai mudar no código", "quero entender a implementação", "tem migration?", "isso vai ficar lento?", "raio-x técnico", "tech walkthrough", "desenha a implementação", "essa é a melhor implementação?", "o que pode dar errado?", "revisa o plano técnico", mesmo que não peça diagrama. Aceita o argumento `fast` para pular o debate em entregas pequenas.
 ---
 
 # Tech walkthrough
@@ -21,6 +21,8 @@ Não explique a partir do plano sozinho. Leia o código que o plano toca (use su
 - Quanto trabalho o fluxo faz hoje e quanto vai fazer depois: consultas ao banco, chamadas a serviços externos, o que roda na hora e o que roda em segundo plano, e com que volume de dados?
 - Qual é o nome técnico real dela (nome da fila SQS, do worker ou Lambda, da rota, do package), lido no código ou na configuração de infraestrutura (CDK, Terraform, serverless, docker-compose, `.env`)? Os diagramas usam esse nome como título.
 - Para tudo que roda em segundo plano: quem dispara, por onde passa (qual fila, qual agendamento), quem executa, em que ordem, quantas vezes tenta de novo, o que acontece quando desiste e onde o resultado fica registrado?
+- Quais tabelas e colunas o plano toca, e como elas se ligam às vizinhas? Leia a fonte da verdade do schema (schema do Prisma, migrations, models do ORM ou DDL), nunca a memória: nomes de tabela e coluna no quadro são os do schema.
+- Quais termos do projeto o plano usa, e como o `GLOSSARY.md` (ou `GLOSSARY-MAP.md` e os glossários por contexto, e os ADRs em `docs/adr/`) os define? Termo que o plano usa e o glossário não tem é um termo novo, e precisa ser marcado como tal.
 
 Se o plano deixa uma decisão técnica em aberto (qual lib, onde mora a função, se precisa de tabela nova), ela não é sua para escolher sozinho: é o conselho técnico abaixo que decide.
 
@@ -92,12 +94,19 @@ Regras dos diagramas, valem em qualquer ferramenta:
 
 ## As seções do quadro
 
-Uma seção (frame) por item abaixo, agrupadas em fileiras: **Fluxo** (antes, depois, bastidores), **Arquitetura** (mapa, peças tocadas), **Banco e performance** (banco, performance, frontend), **Decisões e riscos** (como chegou, riscos). Pule seções que não se aplicam (sem seção dizendo "não se aplica"), menos banco de dados, performance e riscos, que sempre existem.
+Uma seção (frame) por item abaixo, agrupadas em fileiras: **Fluxo** (antes, depois, bastidores), **Arquitetura** (glossário, mapa, peças tocadas), **Banco e performance** (banco, performance, frontend), **Decisões e riscos** (como chegou, riscos). Pule seções que não se aplicam (sem seção dizendo "não se aplica"), menos banco de dados, performance e riscos, que sempre existem.
 
 Dentro de cada seção, o título fica no canto superior esquerdo e uma linha de contexto (no máximo duas) abaixo dele, em cor apagada. Todo o resto é caixa, seta, ficha ou tabela.
 
 ### Como chegou nessa implementação
 Ficha com as decisões em que o conselho técnico pesou alternativas, no máximo cinco linhas: decisão, escolha, alternativa descartada, por quê. Cada célula em uma frase curta, linguagem de negócio. Se o conselho convergiu sem divergência nenhuma, a ficha tem uma linha dizendo isso.
+
+### Glossário
+Tabela termo e significado, com os termos do projeto que o quadro usa, como o `GLOSSARY.md` os define (sem reescrever a definição). Serve para o usuário ler o resto do quadro no vocabulário do projeto, e para o quadro usar o mesmo nome que o código e as conversas usam.
+
+- Só os termos que aparecem no quadro; não copie o glossário inteiro.
+- Termo que o plano usa e o glossário não tem entra em amarelo com "termo novo" e a definição que o plano dá a ele. Isso é um pedido de atualização do glossário: aponte na seção de riscos ("glossário precisa ganhar X").
+- Projeto sem `GLOSSARY.md` e plano sem termo novo: pule a seção.
 
 ### Mapa da arquitetura
 Um diagrama só, mostrando quais sistemas e partes conversam entre si nessa entrega: sistemas externos (Shopify, Bling, Chatwoot...) como caixas soltas, o sistema que está sendo alterado como um contêiner tracejado com as peças envolvidas dentro. O que é novo fica em verde. Serve para o usuário se localizar antes de ver os fluxos.
@@ -138,14 +147,18 @@ Uma tabela só, backend e infraestrutura, com tudo o que muda ou nasce: colunas 
 ### Banco de dados
 Sempre presente, seção própria, nunca escondida em outra.
 
-Sem migration: uma ficha só, "Sem migration: nada muda na estrutura do banco."
+Sem migration: uma ficha só, "Sem migration: nada muda na estrutura do banco." Se o plano lê ou grava em tabelas que já existem, o diagrama abaixo entra mesmo assim, só com o que é tocado, para o usuário ver de onde vem cada dado.
 
-Com migration, uma ficha por migration, com quatro linhas nesta ordem:
+Com migration, a seção tem três partes, nesta ordem:
+
+1. **Diagrama do banco** (ERD): as tabelas tocadas e as vizinhas diretas, com os nomes reais de tabela e coluna tirados da fonte da verdade do schema. Cada tabela mostra a chave primária, as chaves estrangeiras que desenham uma relação e toda coluna nova ou alterada; colunas sem relação com a mudança ficam de fora. Tabela nova fica verde inteira; coluna nova verde, alterada amarela. As relações levam a cardinalidade no rótulo ("N:1"). Coluna removida não aparece no diagrama, só na tabela abaixo.
+2. **Tabela de mudanças no schema**: uma linha por coluna nova, alterada ou removida (e uma linha para a tabela, quando ela nasce ou morre): entidade, coluna, tipo e restrições (nulo, default, único, índice, chave estrangeira), nota de migration.
+3. **Fichas da migration**, uma por migration, com quatro linhas nesta ordem:
 
 - **O que muda**: tabela/coluna em linguagem de negócio, nome técnico depois.
 - **Por quê**: qual parte do plano não funciona sem isso. Se dá para entender com um exemplo de dado, dê o exemplo.
 - **Dados que já existem**: o que acontece com as linhas atuais (ficam vazias, são preenchidas por um script, nada).
-- **Risco**: se é só adição (seguro, reversível) ou se altera/remove algo (pode travar tabela, perder dado, exigir ordem de deploy). Risco alto fica em vermelho.
+- **Risco**: se é só adição (seguro, reversível) ou se altera/remove algo (pode travar tabela, perder dado, exigir ordem de deploy: expandir, migrar, contrair). Índice novo em tabela grande entra aqui, com o risco de lock. Risco alto fica em vermelho.
 
 ### Performance
 Sempre presente. O usuário quer sair sabendo se a entrega deixa algo mais rápido, mais lento ou igual, e se a solução escolhida aguenta o uso real.

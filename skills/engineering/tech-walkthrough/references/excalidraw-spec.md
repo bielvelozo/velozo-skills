@@ -57,8 +57,28 @@ Lista de itens de cima para baixo; o script calcula a altura de cada um pelo tex
 ```
 
 - `card`: ficha com `heading` (primeira linha) e `text`; `style` como nas caixas, `white` por padrão.
-- `table`: `header` opcional, `rows`; uma célula pode ser `{"text", "style"}` para ter fundo colorido (etiqueta de veredito, "NOVO", gravidade). `widths` opcional; sem ele, colunas iguais.
+- `table`: `header` opcional, `rows`; uma célula pode ser `{"text", "style"}` para ter fundo colorido (etiqueta de veredito, "NOVO", gravidade, "+ tabela"). `widths` opcional; sem ele, colunas iguais.
 - `columns`: fichas lado a lado, mesma altura.
+- `erd`: diagrama do banco. Entidades como tabelas (cabeçalho com o nome, uma linha por coluna) dispostas em grade, e relações como setas com rótulo.
+
+```json
+{"erd": {"entities": [
+  {"name": "orders", "columns": [
+    {"name": "id", "type": "uuid", "pk": true},
+    {"name": "account_id", "type": "uuid", "fk": true},
+    {"name": "status", "type": "text", "change": "changed"}]},
+  {"name": "tracking_notifications", "change": "added", "columns": [
+    {"name": "id", "type": "uuid", "pk": true},
+    {"name": "order_id", "type": "uuid", "fk": true}]}
+], "relations": [
+  {"from": "tracking_notifications", "to": "orders", "label": "N:1, único por pedido"}
+]}}
+```
+
+  - `change` na entidade (`added`, `changed`) pinta o cabeçalho; `added` pinta todas as colunas. `change` na coluna (`added`, `changed`, `removed`) pinta só a linha e põe o marcador `+`, `~` ou `-`. Coluna removida costuma ficar só na tabela de mudanças, não no diagrama.
+  - `pk` e `fk` prefixam o nome com `PK`/`FK`. `type` vai à direita, apagado.
+  - As entidades entram em grade na ordem da lista (largura 260, `entityWidth` para mudar); `x` e `y` numa entidade a posicionam à mão, relativos ao item.
+  - A legenda da seção sai sozinha das cores usadas; `legend` troca os textos (`{"green": "tabela ou coluna nova"}`).
 
 ### `boxes` + `arrows`: posicionamento manual (mapa da arquitetura, bastidores com ramificação)
 
@@ -93,7 +113,7 @@ As seções entram nas fileiras pelo `row`, na ordem em que aparecem no spec, co
 | `row` | Seções, da esquerda para a direita |
 |---|---|
 | 1 | Antes, Depois, Bastidores |
-| 2 | Mapa da arquitetura, Peças tocadas |
+| 2 | Glossário, Mapa da arquitetura, Peças tocadas |
 | 3 | Banco de dados, Performance, Frontend |
 | 4 | Como chegou nessa implementação, Riscos |
 

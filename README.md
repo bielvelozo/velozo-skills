@@ -75,7 +75,7 @@ Symlinks every skill into `~/.claude/skills` and `~/.agents/skills`; a `git pull
 
 **The problem.** A `/grill-me` session ([@mattpocock](https://github.com/mattpocock)'s skill) leaves the business decisions well defined. But the technical side (which route is born, which queue is reused, whether there is a migration and why, what runs in the background) ends up scattered across paragraphs, and I don't hold the whole codebase in my head to follow along.
 
-**The fix.** One Excalidraw board, one infinite canvas, with the before and after of each flow, the map of the systems that talk to each other, the backstage (queues, workers, retries), the migration with its why, the performance verdict, and the risks that remain. Every piece of code is introduced by what it does, with the technical name after it. The implementation it explains comes out of a debate between three agents (minimal, robust, performance), not the first idea that works.
+**The fix.** One Excalidraw board, one infinite canvas, with the before and after of each flow, the glossary terms it uses, the map of the systems that talk to each other, the backstage (queues, workers, retries), the database diagram and the migration with its why, the performance verdict, and the risks that remain. Every piece of code is introduced by what it does, with the technical name after it. The implementation it explains comes out of a debate between three agents (minimal, robust, performance), not the first idea that works.
 
 That's `/tech-walkthrough`.
 
@@ -89,7 +89,7 @@ Skills for code work.
 
 #### Model-invoked
 
-- **[tech-walkthrough](./skills/engineering/tech-walkthrough/SKILL.md)**: Explains the technical side of an already-decided plan on an Excalidraw board: before and after, architecture map, backstage, migrations, performance and risks. Three agents debate the best implementation before anything is drawn. `fast` skips the debate.
+- **[tech-walkthrough](./skills/engineering/tech-walkthrough/SKILL.md)**: Explains the technical side of an already-decided plan on an Excalidraw board: before and after, glossary, architecture map, backstage, database diagram and migrations, performance and risks. Three agents debate the best implementation before anything is drawn. `fast` skips the debate.
 
 The skill's own instructions (`SKILL.md`) are written in Portuguese; the agent reads them fine either way, and the board comes out in the language of your plan.
 

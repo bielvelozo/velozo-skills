@@ -155,6 +155,48 @@
       ]
     },
     {
+      "id": "glossario",
+      "title": "Glossário",
+      "row": 2,
+      "w": 720,
+      "note": "Termos como o GLOSSARY.md do projeto define. Em amarelo, termo que o plano usa e o glossário ainda não tem.",
+      "stack": [
+        {
+          "table": {
+            "widths": [
+              200,
+              392
+            ],
+            "header": [
+              "Termo",
+              "Significado"
+            ],
+            "rows": [
+              [
+                "Despacho",
+                "Momento em que o Bling emite a nota e gera o código de rastreio do pedido"
+              ],
+              [
+                "Aviso de rastreio",
+                "Mensagem ao cliente com o link de rastreio; hoje só por e-mail da Shopify"
+              ],
+              [
+                "Conta",
+                "Registro único por cliente no OMS, chave para achar telefone e pedidos"
+              ],
+              [
+                {
+                  "text": "Registro de aviso",
+                  "style": "yellow"
+                },
+                "Termo novo: linha que marca um aviso enviado ou falhado por pedido, para não avisar em dobro"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "mapa",
       "title": "Mapa da arquitetura",
       "row": 2,
@@ -339,9 +381,154 @@
       "id": "banco",
       "title": "Banco de dados — tem migration",
       "row": 3,
-      "w": 720,
-      "note": "Uma migration só, de adição.",
+      "w": 960,
+      "note": "Tabela nova e as vizinhas diretas, com os nomes reais do schema. Uma migration só, de adição.",
       "stack": [
+        {
+          "erd": {
+            "entities": [
+              {
+                "name": "accounts",
+                "columns": [
+                  {
+                    "name": "id",
+                    "type": "uuid",
+                    "pk": true
+                  },
+                  {
+                    "name": "phone",
+                    "type": "text"
+                  },
+                  {
+                    "name": "cpf",
+                    "type": "text"
+                  }
+                ]
+              },
+              {
+                "name": "orders",
+                "columns": [
+                  {
+                    "name": "id",
+                    "type": "uuid",
+                    "pk": true
+                  },
+                  {
+                    "name": "account_id",
+                    "type": "uuid",
+                    "fk": true
+                  },
+                  {
+                    "name": "shopify_id",
+                    "type": "bigint"
+                  },
+                  {
+                    "name": "status",
+                    "type": "text"
+                  }
+                ]
+              },
+              {
+                "name": "tracking_notifications",
+                "change": "added",
+                "columns": [
+                  {
+                    "name": "id",
+                    "type": "uuid",
+                    "pk": true
+                  },
+                  {
+                    "name": "order_id",
+                    "type": "uuid",
+                    "fk": true
+                  },
+                  {
+                    "name": "phone",
+                    "type": "text"
+                  },
+                  {
+                    "name": "status",
+                    "type": "text"
+                  },
+                  {
+                    "name": "error",
+                    "type": "text null"
+                  },
+                  {
+                    "name": "sent_at",
+                    "type": "timestamptz"
+                  }
+                ]
+              }
+            ],
+            "relations": [
+              {
+                "from": "orders",
+                "to": "accounts",
+                "label": "N:1"
+              },
+              {
+                "from": "tracking_notifications",
+                "to": "orders",
+                "label": "N:1, único por pedido"
+              }
+            ]
+          }
+        },
+        {
+          "table": {
+            "widths": [
+              220,
+              150,
+              250,
+              212
+            ],
+            "header": [
+              "Entidade",
+              "Coluna",
+              "Tipo e restrições",
+              "Migration"
+            ],
+            "rows": [
+              [
+                {
+                  "text": "+ tracking_notifications",
+                  "style": "green"
+                },
+                "",
+                "tabela nova",
+                "aditiva; nada muda nas existentes"
+              ],
+              [
+                {
+                  "text": "+ tracking_notifications",
+                  "style": "green"
+                },
+                "order_id",
+                "uuid, FK orders.id, único",
+                "o único é o que impede o aviso em dobro"
+              ],
+              [
+                {
+                  "text": "+ tracking_notifications",
+                  "style": "green"
+                },
+                "status",
+                "text: enviando, enviado, falhou",
+                "sem default; o worker grava"
+              ],
+              [
+                {
+                  "text": "+ tracking_notifications",
+                  "style": "green"
+                },
+                "error",
+                "text, nulo",
+                "motivo da última falha"
+              ]
+            ]
+          }
+        },
         {
           "card": {
             "style": "green",
@@ -368,7 +555,11 @@
             "text": "Só adiciona uma tabela: não trava nada e dá para desfazer."
           }
         }
-      ]
+      ],
+      "legend": {
+        "green": "tabela ou coluna nova",
+        "gray": "já existe"
+      }
     },
     {
       "id": "perf",
