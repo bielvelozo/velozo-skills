@@ -4,7 +4,7 @@
     "name": "Gabriel Velozo",
     "url": "https://github.com/bielvelozo"
   },
-  "description": "Gabriel Velozo's agent skills for engineering, as an installable Claude Code plugin.",
+  "description": "Gabriel Velozo's agent skills and Claude Code mods.",
   "plugins": [
     {
       "name": "velozo-skills",
@@ -16,6 +16,19 @@
         "skills",
         "excalidraw",
         "walkthrough"
+      ]
+    },
+    {
+      "name": "leaks",
+      "source": "./plugins/leaks",
+      "description": "Where your Claude Code week went: /leaks ranks avoidable spend, a strip flags leaks live, /compact-at sets a per-session auto-compact point. Fork of davekiss/mods leaks that works in the desktop app.",
+      "category": "productivity",
+      "keywords": [
+        "usage",
+        "limits",
+        "cache",
+        "compact",
+        "mod"
       ]
     }
   ]

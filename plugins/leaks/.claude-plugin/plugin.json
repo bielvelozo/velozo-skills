@@ -1,0 +1,28 @@
+{
+  "name": "leaks",
+  "version": "0.2.0",
+  "author": {
+    "name": "Dave Kiss",
+    "url": "https://github.com/davekiss"
+  },
+  "license": "MIT",
+  "description": "Find where your Claude Code week went and fix it: /leaks ranks the avoidable spend in your transcripts, a strip above the prompt flags a leak while it happens, and /compact-at sets an auto-compact point for one session. Works in the desktop app.",
+  "keywords": [
+    "usage",
+    "limits",
+    "cache",
+    "compact",
+    "mod"
+  ],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "warn_at": {
+      "type": "number",
+      "title": "Warn past this many context tokens",
+      "description": "The strip above the prompt flags a session whose context is past this size: every turn re-reads all of it.",
+      "default": 400000
+    }
+  },
+  "homepage": "https://github.com/bielvelozo/velozo-skills/tree/main/plugins/leaks",
+  "repository": "https://github.com/bielvelozo/velozo-skills"
+}

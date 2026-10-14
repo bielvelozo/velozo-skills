@@ -93,6 +93,16 @@ Skills for code work.
 
 The skill's own instructions (`SKILL.md`) are written in Portuguese; the agent reads them fine either way, and the board comes out in the language of your plan.
 
+## Mods
+
+Claude Code plugins that change the interface itself (a pane, a strip above the prompt, a slash command), installed separately from the skills. Claude Code only.
+
+- **[leaks](./plugins/leaks/README.md)**: Where your Claude Code week went. `/leaks` ranks the avoidable spend in your transcripts with one-press fixes, a strip above the prompt flags a leak while it happens, and `/compact-at` sets an auto-compact point for a single session. A fork of [@davekiss](https://github.com/davekiss)'s [leaks](https://github.com/davekiss/mods/tree/main/leaks) that also works in the desktop app.
+
+```bash
+claude plugin install leaks@velozo
+```
+
 ## License
 
 MIT.
