@@ -1,7 +1,7 @@
 {
   "name": "velozo-skills",
-  "version": "0.1.0",
-  "description": "Gabriel Velozo's agent skills for engineering: a visual tech walkthrough (Excalidraw) of a plan's technical side, with an agent debate and risk analysis.",
+  "version": "0.2.0",
+  "description": "Gabriel Velozo's agent skills for engineering: a visual tech walkthrough (Excalidraw) of a plan's technical side, with an agent debate and risk analysis, and a living project map with status, blockers and next step.",
   "author": {
     "name": "Gabriel Velozo",
     "url": "https://github.com/bielvelozo"
@@ -15,9 +15,12 @@
     "excalidraw",
     "system-design",
     "walkthrough",
-    "planning"
+    "planning",
+    "project-map",
+    "status"
   ],
   "skills": [
+    "./skills/engineering/map",
     "./skills/engineering/tech-walkthrough"
   ]
 }

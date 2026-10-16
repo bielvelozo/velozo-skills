@@ -1,0 +1,5 @@
+interface:
+  display_name: "Map"
+  short_description: "Draw and update the project map: parts, progress, blockers, next step"
+policy:
+  allow_implicit_invocation: true

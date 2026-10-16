@@ -66,6 +66,7 @@ Symlinks every skill into `~/.claude/skills` and `~/.agents/skills`; a `git pull
 
 - **Python 3** on your PATH: `tech-walkthrough` builds the Excalidraw board with a script.
 - Claude Code with the **Artifact** tool, to publish the board as a link. Without it, the skill delivers only the `.excalidraw` file.
+- Claude Code for `map`: the map is drawn by the `project-map` subagent in `agents/`. That subagent loads the `impeccable` skill; install it or drop it from the agent's `skills:` list.
 
 ### 3. Done.
 
@@ -79,6 +80,14 @@ Symlinks every skill into `~/.claude/skills` and `~/.agents/skills`; a `git pull
 
 That's `/tech-walkthrough`.
 
+### I lose track of where the project stands
+
+**The problem.** After a few sessions, the state of a project is spread across commits, plans and my own memory. Coming back, I don't know what is done, what is stuck waiting on someone, or what the next step is.
+
+**The fix.** One HTML page per project with the main parts and their status, backed by evidence from the code and the history, the next milestone and step on top, what changed since the last update highlighted, and the decisions waiting on me with a suggested default.
+
+That's `/map`.
+
 ## Reference
 
 These split on one axis: who can invoke them. **User-invoked** skills run only when you type them. **Model-invoked** skills can be typed or reached for automatically by the agent when the task fits.
@@ -89,9 +98,10 @@ Skills for code work.
 
 #### Model-invoked
 
+- **[map](./skills/engineering/map/SKILL.md)**: Draws and updates a living map of the project as an HTML page: the main parts and their status, what is blocked and on whom, the next milestone, the next step, what changed since last time, and the decisions waiting on you. Claude Code only (uses the `project-map` subagent).
 - **[tech-walkthrough](./skills/engineering/tech-walkthrough/SKILL.md)**: Explains the technical side of an already-decided plan on an Excalidraw board: before and after, glossary, architecture map, backstage, database diagram and migrations, performance and risks. Three agents debate the best implementation before anything is drawn. `fast` skips the debate.
 
-The skill's own instructions (`SKILL.md`) are written in Portuguese; the agent reads them fine either way, and the board comes out in the language of your plan.
+The skills' own instructions (`SKILL.md`) are written in Portuguese; the agent reads them fine either way. The tech-walkthrough board comes out in the language of your plan; the map comes out in Portuguese.
 
 ## Mods
 

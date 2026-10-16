@@ -15,6 +15,6 @@ Every `SKILL.md` is either user-invoked (`disable-model-invocation: true` in the
 
 `.claude-plugin/marketplace.json` is the repo's own marketplace. After touching either manifest, run `claude plugin validate .`.
 
-To (re)link every skill outside `deprecated/` into the local skill directories (`~/.claude/skills`, `~/.agents/skills`), run `scripts/link-skills.sh`. Each entry is a symlink into this repo; re-run the script after adding, removing, or renaming a skill.
+To (re)link every skill outside `deprecated/` into the local skill directories (`~/.claude/skills`, `~/.agents/skills`), run `scripts/link-skills.sh`. Each entry is a symlink into this repo; re-run the script after adding, removing, or renaming a skill. The same script links the Claude Code subagents in `agents/` (shipped by the plugin) into `~/.claude/agents`.
 
 Repo prose (README, docs, CLAUDE.md, CHANGELOG), skill arguments (`fast`, for example) and file names are in English. The text inside the skills themselves (`SKILL.md`, references, prompts) is in Portuguese.

@@ -5,6 +5,7 @@ set -euo pipefail
 # skills de cada agente:
 #   - ~/.claude/skills: Claude Code
 #   - ~/.agents/skills: Codex e outros compatíveis com Agent Skills
+# Os subagentes de agents/ vão para ~/.claude/agents (só o Claude Code os usa).
 # Cada entrada é um link simbólico para este repositório, então um `git pull`
 # basta para atualizar. No Windows (Git Bash), rode com
 # MSYS=winsymlinks:nativestrict e o modo de desenvolvedor ligado, senão o `ln`
@@ -47,4 +48,20 @@ for DEST in "${DESTS[@]}"; do
     ln -sfn "$src" "$target"
     echo "linked $name -> $src ($DEST)"
   done
+done
+
+AGENTS_DEST="$HOME/.claude/agents"
+mkdir -p "$AGENTS_DEST"
+
+for src in "$REPO"/agents/*.md; do
+  [ -e "$src" ] || continue
+  name="$(basename "$src")"
+  target="$AGENTS_DEST/$name"
+
+  if [ -e "$target" ] && [ ! -L "$target" ]; then
+    rm -f "$target"
+  fi
+
+  ln -sfn "$src" "$target"
+  echo "linked $name -> $src ($AGENTS_DEST)"
 done
